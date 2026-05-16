@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Alpino-Variable";
+  src: url("/fonts/Alpino-Variable.woff2") format("woff2"),
+    url("/fonts/Alpino-Variable.woff") format("woff");
+  font-weight: 100 900;
+  font-display: swap;
+}
+.nav-link {
+  @apply px-3 py-1.5 text-sm font-bold uppercase tracking-wide text-sky-800 
+         rounded-lg hover:bg-sky-800/10 transition-colors;
+}
+.icon-btn {
+  @apply w-9 h-9 flex items-center justify-center rounded-lg border 
+         border-sky-800/20 text-sky-800 hover:bg-sky-800/10 transition-colors;
+}
+
+:root {
+  --font-alpino: "Alpino-Variable", sans-serif;
+}
