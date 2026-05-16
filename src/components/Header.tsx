@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { FizziLogo } from "@/components/FizziLogo";
-import { useCartStore } from "@/stores/cartStore";   // import cart store
+import { Link } from "react-router-dom";
+import { useCartStore } from "@/stores/cartStore";
 import clsx from "clsx";
 
 const FLAVORS = [
@@ -15,21 +16,21 @@ const FLAVORS = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const cartCount = useCartStore((state) => state.getTotalItems()); // real cart count
+  const cartCount = useCartStore((state) => state.getTotalItems());
 
   return (
     <header className="fixed top-0 z-[200] mb-0 flex h-16 items-center
                        justify-between bg-yellow-300/90 px-6 backdrop-blur-md
                        border-b border-yellow-400/30 w-full">
 
-      {/* Logo - links to home */}
-      <a href="/" aria-label="Fizzi home">
+      {/* Logo */}
+      <Link to="/" aria-label="Fizzi home">
         <FizziLogo className="h-10 cursor-pointer text-sky-800" />
-      </a>
+      </Link>
 
       {/* Desktop nav */}
       <nav className="hidden md:flex items-center gap-1">
-        <a href="/" className="nav-link">Home</a>
+        <Link to="/" className="nav-link">Home</Link>
 
         {/* Flavors dropdown */}
         <div className="relative group">
@@ -45,30 +46,28 @@ export default function Header() {
                           hidden group-hover:block bg-yellow-50 border border-yellow-200
                           rounded-xl p-2 min-w-[200px] shadow-sm z-50">
             {FLAVORS.map((f) => (
-              <a
+              <Link
                 key={f.name}
-                href={`/shop?flavor=${f.slug}`}
+                to={`/shop?flavor=${f.slug}`}
                 className="flex items-center gap-3 px-3 py-2 rounded-lg
                            text-sky-900 text-sm hover:bg-yellow-100 transition-colors"
               >
                 <span className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                       style={{ background: f.color }} />
                 {f.name}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
 
-        <a href="/about" className="nav-link">About</a>
-        <a href="/blog" className="nav-link">Blog</a>
-        <a href="/contact" className="nav-link">Contact</a>
+        <Link to="/about" className="nav-link">About</Link>
+        <Link to="/blog" className="nav-link">Blog</Link>
+        <Link to="/contact" className="nav-link">Contact</Link>
       </nav>
 
       {/* Actions */}
       <div className="flex items-center gap-2">
-       
-        {/* Cart button now links to /cart */}
-        <a href="/cart" className="icon-btn relative">
+        <Link to="/cart" className="icon-btn relative">
           <CartIcon />
           {cartCount > 0 && (
             <span className="absolute -top-1 -right-1 bg-orange-600 text-white
@@ -77,12 +76,12 @@ export default function Header() {
               {cartCount}
             </span>
           )}
-        </a>
-        <a href="/shop" className="hidden md:block rounded-lg bg-orange-600 px-4 py-2
+        </Link>
+        <Link to="/shop" className="hidden md:block rounded-lg bg-orange-600 px-4 py-2
                                text-sm font-bold uppercase tracking-wide text-white
                                hover:bg-orange-700 transition-colors">
           Shop Now
-        </a>
+        </Link>
 
         {/* Mobile hamburger */}
         <button className="md:hidden icon-btn" onClick={() => setMenuOpen(!menuOpen)}
@@ -96,40 +95,39 @@ export default function Header() {
         <div className="absolute top-full left-0 right-0 bg-yellow-300
                         border-t border-yellow-400/30 px-6 py-4
                         flex flex-col gap-2 md:hidden">
-          <a href="/" className="py-2 font-bold uppercase text-sky-800 text-sm tracking-wide border-b border-yellow-400/30">
+          <Link to="/" className="py-2 font-bold uppercase text-sky-800 text-sm tracking-wide border-b border-yellow-400/30">
             Home
-          </a>
-          <a href="/about" className="py-2 font-bold uppercase text-sky-800 text-sm tracking-wide border-b border-yellow-400/30">
+          </Link>
+          <Link to="/about" className="py-2 font-bold uppercase text-sky-800 text-sm tracking-wide border-b border-yellow-400/30">
             About
-          </a>
-          <a href="/blog" className="py-2 font-bold uppercase text-sky-800 text-sm tracking-wide border-b border-yellow-400/30">
+          </Link>
+          <Link to="/blog" className="py-2 font-bold uppercase text-sky-800 text-sm tracking-wide border-b border-yellow-400/30">
             Blog
-          </a>
-          <a href="/contact" className="py-2 font-bold uppercase text-sky-800 text-sm tracking-wide border-b border-yellow-400/30">
+          </Link>
+          <Link to="/contact" className="py-2 font-bold uppercase text-sky-800 text-sm tracking-wide border-b border-yellow-400/30">
             Contact
-          </a>
+          </Link>
           <p className="pt-1 text-xs font-bold uppercase text-sky-800 tracking-wide opacity-60">
             Flavors
           </p>
           {FLAVORS.map(f => (
-            <a key={f.name} href={`/shop?flavor=${f.slug}`}
+            <Link key={f.name} to={`/shop?flavor=${f.slug}`}
                className="flex items-center gap-3 py-1.5 text-sm text-sky-900">
               <span className="w-2.5 h-2.5 rounded-full"
                     style={{ background: f.color }} />
               {f.name}
-            </a>
+            </Link>
           ))}
-          <a href="/shop" className="mt-2 rounded-lg bg-orange-600 px-4 py-3
+          <Link to="/shop" className="mt-2 rounded-lg bg-orange-600 px-4 py-3
                                  text-sm font-bold uppercase tracking-wide text-white
                                  text-center hover:bg-orange-700 transition-colors">
             Shop Now
-          </a>
+          </Link>
         </div>
       )}
     </header>
   );
 }
-
 
 function CartIcon() {
   return (
@@ -139,6 +137,7 @@ function CartIcon() {
     </svg>
   );
 }
+
 function MenuIcon({ open }: { open: boolean }) {
   return open ? (
     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">

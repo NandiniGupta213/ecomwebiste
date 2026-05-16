@@ -6,7 +6,8 @@ import { TextSplitter } from "@/components/TextSplitter";
 import FloatingCan from "@/components/FloatingCan";
 import { Center } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useCartStore } from "@/stores/cartStore"; // <-- import cart store
+import { useCartStore } from "@/stores/cartStore";
+import { Link } from "react-router-dom"; // <-- import Link
 
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -29,7 +30,6 @@ const heroData = {
   priceBadge: "₹2,499 only",
 };
 
-// Map product names to IDs (matching the cart store IDs)
 const productMap = {
   "Black Cherry": { id: "black-cherry", price: 2499 },
   "Grape Goodness": { id: "grape", price: 2499 },
@@ -62,7 +62,7 @@ const BEST_SELLERS = [
 export default function Hero() {
   const ready = useStore((state) => state.ready);
   const isDesktop = useMediaQuery("(min-width: 768px)", true);
-  const addToCart = useCartStore((state) => state.addItem); // get addToCart function
+  const addToCart = useCartStore((state) => state.addItem);
 
   const handleAddToCart = (productName: string) => {
     const product = productMap[productName as keyof typeof productMap];
@@ -199,12 +199,12 @@ export default function Hero() {
             </div>
 
             <div className="mt-10">
-              <a
-                href="/shop"
+              <Link
+                to="/shop"
                 className="inline-block rounded-full border-2 border-orange-600 px-8 py-3 text-sm font-bold uppercase tracking-wide text-orange-600 transition hover:bg-orange-600/10"
               >
                 View All Products →
-              </a>
+              </Link>
             </div>
           </div>
         </div>

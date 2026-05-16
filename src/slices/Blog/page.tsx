@@ -8,6 +8,7 @@ import FloatingCan from "@/components/FloatingCan";
 import { useRef } from "react";
 import { Group } from "three";
 import { useFrame } from "@react-three/fiber";
+import { Link } from "react-router-dom"; // <-- import Link
 
 const BLOG_POSTS = [
   {
@@ -36,7 +37,6 @@ const BLOG_POSTS = [
   },
 ];
 
-// Component for a drifting large can
 function DriftingCan({ flavor, position, scale = 1.2 }: { flavor: any; position: [number, number, number]; scale?: number }) {
   const groupRef = useRef<Group>(null);
   useFrame(({ clock }) => {
@@ -57,21 +57,16 @@ function DriftingCan({ flavor, position, scale = 1.2 }: { flavor: any; position:
 export default function BlogPage() {
   return (
     <Bounded className="relative bg-yellow-300 py-16 overflow-hidden">
-      {/* 3D Canvas for floating cans */}
       <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
         <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: 'transparent' }}>
           <ambientLight intensity={0.6} />
           <directionalLight position={[5, 5, 5]} intensity={1.2} />
           <Environment preset="city" environmentIntensity={0.4} />
-
-          {/* Top-left large can */}
           <DriftingCan flavor="watermelon" position={[-7, 2.5, -2]} scale={2} />
-          {/* Bottom-right large can */}
           <DriftingCan flavor="blackCherry" position={[10, 0, -6]} scale={2.5} />
         </Canvas>
       </div>
 
-      {/* Content wrapper – with a slight backdrop to separate from cans */}
       <div className="relative z-10 max-w-5xl mx-auto">
         <h1 className="text-5xl md:text-7xl font-black uppercase text-orange-500 text-center drop-shadow-md">
           <TextSplitter text="Fresh Fizzi News" />
@@ -89,12 +84,12 @@ export default function BlogPage() {
               <h2 className="text-2xl font-bold uppercase text-sky-800">{post.title}</h2>
               <p className="text-orange-600 text-sm mt-1">{post.date}</p>
               <p className="text-sky-700 mt-3">{post.excerpt}</p>
-              <a
-                href={`/blog/${post.slug}`}
+              <Link
+                to={`/blog/${post.slug}`}
                 className="inline-block mt-4 text-orange-600 font-bold uppercase tracking-wide hover:text-orange-700"
               >
                 Read More →
-              </a>
+              </Link>
             </article>
           ))}
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import { Center, Environment } from "@react-three/drei";
 import { Bounded } from "@/components/Bounded";
@@ -41,7 +41,7 @@ export default function ShopPage() {
         {flavorSlug && (
           <p className="text-center text-sky-800 mt-2">
             Showing: {filteredProducts[0]?.name}{" "}
-            <a href="/shop" className="text-orange-600 underline">(Clear)</a>
+            <Link to="/shop" className="text-orange-600 underline">(Clear)</Link>
           </p>
         )}
 
@@ -57,7 +57,6 @@ export default function ShopPage() {
               key={product.id}
               className="flex flex-col items-center rounded-2xl border border-yellow-400/40 bg-yellow-300/20 p-6 backdrop-blur-sm transition hover:-translate-y-1"
             >
-              {/* 3D Floating Can */}
               <div className="h-32 w-32">
                 <Canvas camera={{ position: [0, 0, 2.5], fov: 45 }} style={{ background: 'transparent' }}>
                   <ambientLight intensity={5} />
