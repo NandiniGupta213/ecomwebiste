@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import { Canvas } from "@react-three/fiber";
-import { Center, Environment } from "@react-three/drei";
+import { View, Center, Environment } from "@react-three/drei";
 import { Bounded } from "@/components/Bounded";
 import { useCartStore } from "@/stores/cartStore";
 import FloatingCan from "@/components/FloatingCan";
@@ -15,6 +14,25 @@ const PRODUCTS = [
   { id: "strawberry-lemonade", name: "Strawberry Lemonade", price: 2499, slug: "strawberry-lemonade", flavor: "strawberryLemonade" as const },
   { id: "watermelon", name: "Watermelon Crush", price: 2699, slug: "watermelon-crush", flavor: "watermelon" as const },
 ];
+
+// Component that renders a single 3D can inside a View (portalled to global Canvas)
+function ProductCan({ flavor }: { flavor: typeof PRODUCTS[0]["flavor"] }) {
+  return (
+    <View className="absolute inset-0 w-full h-full">
+      <ambientLight intensity={5} />
+      <directionalLight position={[3, 3, 2]} intensity={1.5} />
+      <Environment preset="city" environmentIntensity={0.6} />
+      <Center>
+        <FloatingCan
+          flavor={flavor}
+          floatIntensity={0.3}
+          rotationIntensity={0.8}
+          floatSpeed={5}
+        />
+      </Center>
+    </View>
+  );
+}
 
 export default function ShopPage() {
   const [searchParams] = useSearchParams();
@@ -55,22 +73,11 @@ export default function ShopPage() {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="flex flex-col items-center rounded-2xl border border-yellow-400/40 bg-yellow-300/20 p-6 backdrop-blur-sm transition hover:-translate-y-1"
+              className="relative flex flex-col items-center rounded-2xl border border-yellow-400/40 bg-yellow-300/20 p-6 backdrop-blur-sm transition hover:-translate-y-1"
             >
-              <div className="h-32 w-32">
-                <Canvas camera={{ position: [0, 0, 2.5], fov: 45 }} style={{ background: 'transparent' }}>
-                  <ambientLight intensity={5} />
-                  <directionalLight position={[3, 3, 2]} intensity={1.5} />
-                  <Environment preset="city" environmentIntensity={0.6} />
-                  <Center>
-                    <FloatingCan
-                      flavor={product.flavor}
-                      floatIntensity={0.3}
-                      rotationIntensity={0.8}
-                      floatSpeed={5}
-                    />
-                  </Center>
-                </Canvas>
+              {/* 3D can – rendered inside a View (shared global Canvas) */}
+              <div className="h-32 w-32 relative">
+                <ProductCan flavor={product.flavor} />
               </div>
 
               <h3 className="mt-4 text-2xl font-bold uppercase text-sky-800">{product.name}</h3>

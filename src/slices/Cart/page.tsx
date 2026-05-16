@@ -3,18 +3,37 @@
 import { Bounded } from "@/components/Bounded";
 import { useCartStore } from "@/stores/cartStore";
 import { Link } from "react-router-dom";
-import { Canvas } from "@react-three/fiber";
-import { Center, Environment } from "@react-three/drei";
+import { View, Center, Environment } from "@react-three/drei";
 import FloatingCan from "@/components/FloatingCan";
+import { SodaCanProps } from "@/components/SodaCan";
 
-// Map product IDs (from cart) to the flavor keys expected by FloatingCan
-const flavorMap: Record<string, any> = {
+// Type‑safe flavor map – ensures returned values match FloatingCan's expected type
+const flavorMap: Record<string, SodaCanProps["flavor"]> = {
   "black-cherry": "blackCherry",
   "grape": "grape",
   "lemon-lime": "lemonLime",
   "strawberry-lemonade": "strawberryLemonade",
   "watermelon": "watermelon",
 };
+
+// Component that renders a single 3D can inside a View
+function CartItemCan({ flavor }: { flavor: SodaCanProps["flavor"] }) {
+  return (
+    <View className="absolute inset-0 w-full h-full">
+      <ambientLight intensity={1.2} />
+      <directionalLight position={[3, 3, 2]} intensity={1.5} />
+      <Environment preset="city" environmentIntensity={0.6} />
+      <Center>
+        <FloatingCan
+          flavor={flavor}
+          floatIntensity={0.2}
+          rotationIntensity={0.5}
+          floatSpeed={1.5}
+        />
+      </Center>
+    </View>
+  );
+}
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, getTotalPrice, getTotalItems } = useCartStore();
@@ -46,28 +65,17 @@ export default function CartPage() {
 
         <div className="space-y-4">
           {items.map((item) => {
-            const flavorKey = flavorMap[item.id] || "blackCherry"; // fallback
+            const flavorKey = flavorMap[item.id];
+            if (!flavorKey) return null; // safety fallback
+
             return (
               <div
                 key={item.id}
                 className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-yellow-400/40 bg-yellow-300/20 p-4 backdrop-blur-sm"
               >
-                {/* 3D Floating Can instead of emoji */}
                 <div className="flex items-center gap-4 min-w-[150px]">
-                  <div className="h-16 w-16">
-                    <Canvas camera={{ position: [0, 0, 2.5], fov: 45 }} style={{ background: 'transparent' }}>
-                      <ambientLight intensity={1.2} />
-                      <directionalLight position={[3, 3, 2]} intensity={1.5} />
-                      <Environment preset="city" environmentIntensity={0.6} />
-                      <Center>
-                        <FloatingCan
-                          flavor={flavorKey}
-                          floatIntensity={0.2}
-                          rotationIntensity={0.5}
-                          floatSpeed={1.5}
-                        />
-                      </Center>
-                    </Canvas>
+                  <div className="relative h-16 w-16">
+                    <CartItemCan flavor={flavorKey} />
                   </div>
                   <div>
                     <h3 className="font-bold text-sky-800">{item.name}</h3>
@@ -112,15 +120,10 @@ export default function CartPage() {
             <span className="text-orange-600">₹{getTotalPrice()}</span>
           </div>
           <p className="text-sm text-sky-700 mt-2">Free shipping on orders over ₹1,500</p>
-          <button
-            className="mt-4 w-full rounded-full bg-orange-600 py-3 text-sm font-bold uppercase tracking-wide text-white hover:bg-orange-700 transition"
-          >
+          <button className="mt-4 w-full rounded-full bg-orange-600 py-3 text-sm font-bold uppercase tracking-wide text-white hover:bg-orange-700 transition">
             Proceed to Checkout
           </button>
-          <Link
-            to="/shop"
-            className="block text-center mt-3 text-orange-600 text-sm font-bold uppercase hover:underline"
-          >
+          <Link to="/shop" className="block text-center mt-3 text-orange-600 text-sm font-bold uppercase hover:underline">
             ← Continue Shopping
           </Link>
         </div>

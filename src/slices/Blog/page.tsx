@@ -2,13 +2,12 @@
 
 import { Bounded } from "@/components/Bounded";
 import { TextSplitter } from "@/components/TextSplitter";
-import { Canvas } from "@react-three/fiber";
-import { Center, Environment } from "@react-three/drei";
+import { View, Center, Environment } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import FloatingCan from "@/components/FloatingCan";
 import { useRef } from "react";
 import { Group } from "three";
-import { useFrame } from "@react-three/fiber";
-import { Link } from "react-router-dom"; // <-- import Link
+import { Link } from "react-router-dom";
 
 const BLOG_POSTS = [
   {
@@ -37,6 +36,7 @@ const BLOG_POSTS = [
   },
 ];
 
+// Drifting can – works inside the shared Canvas
 function DriftingCan({ flavor, position, scale = 1.2 }: { flavor: any; position: [number, number, number]; scale?: number }) {
   const groupRef = useRef<Group>(null);
   useFrame(({ clock }) => {
@@ -57,16 +57,18 @@ function DriftingCan({ flavor, position, scale = 1.2 }: { flavor: any; position:
 export default function BlogPage() {
   return (
     <Bounded className="relative bg-yellow-300 py-16 overflow-hidden">
-      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: 'transparent' }}>
+      {/* 3D Scene – portalled into the global Canvas */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <View className="w-full h-full">
           <ambientLight intensity={0.6} />
           <directionalLight position={[5, 5, 5]} intensity={1.2} />
           <Environment preset="city" environmentIntensity={0.4} />
           <DriftingCan flavor="watermelon" position={[-7, 2.5, -2]} scale={2} />
           <DriftingCan flavor="blackCherry" position={[10, 0, -6]} scale={2.5} />
-        </Canvas>
+        </View>
       </div>
 
+      {/* Content – unchanged */}
       <div className="relative z-10 max-w-5xl mx-auto">
         <h1 className="text-5xl md:text-7xl font-black uppercase text-orange-500 text-center drop-shadow-md">
           <TextSplitter text="Fresh Fizzi News" />
