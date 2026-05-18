@@ -3,34 +3,12 @@
 import { Bounded } from "@/components/Bounded";
 import Button from "@/components/Button";
 import { TextSplitter } from "@/components/TextSplitter";
-import { View, Center, Environment, Float } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import FloatingCan from "@/components/FloatingCan";
-import { Bubbles } from "@/slices/Hero/Bubbles";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useRef } from "react";
-import { Group } from "three";
 
 gsap.registerPlugin(ScrollTrigger);
-
-function DriftingCan({ flavor, offset }: { flavor: any; offset: [number, number, number] }) {
-  const groupRef = useRef<Group>(null);
-  useFrame(({ clock }) => {
-    if (groupRef.current) {
-      groupRef.current.position.y = offset[1] + Math.sin(clock.getElapsedTime() * 0.5) * 0.3;
-      groupRef.current.rotation.y += 0.01;
-    }
-  });
-  return (
-    <group ref={groupRef} position={offset}>
-      <Center>
-        <FloatingCan flavor={flavor} floatIntensity={0.2} rotationIntensity={0.5} />
-      </Center>
-    </group>
-  );
-}
 
 export default function AboutPage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,7 +16,6 @@ export default function AboutPage() {
 
   useGSAP(
     () => {
-      // Safely animate heading
       gsap.fromTo(
         headingRef.current,
         { opacity: 0, y: 80, scale: 0.8 },
@@ -55,7 +32,6 @@ export default function AboutPage() {
         }
       );
 
-      // Animate paragraphs using class selector (scoped)
       gsap.fromTo(
         ".about-paragraph",
         { opacity: 0, y: 40, filter: "blur(5px)" },
@@ -73,13 +49,10 @@ export default function AboutPage() {
         }
       );
 
-      // Animate value cards using class selector
       gsap.fromTo(
         ".value-card",
-        { rotationY: -25, rotationX: 10, opacity: 0, y: 60 },
+        { opacity: 0, y: 60 },
         {
-          rotationY: 0,
-          rotationX: 0,
           opacity: 1,
           y: 0,
           duration: 0.9,
@@ -92,28 +65,11 @@ export default function AboutPage() {
         }
       );
     },
-    { scope: containerRef, dependencies: [] } // scope limits queries to containerRef
+    { scope: containerRef, dependencies: [] }
   );
 
   return (
     <Bounded className="relative bg-yellow-300 py-16 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <View className="w-full h-full">
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[5, 10, 5]} intensity={1.2} />
-          <Environment preset="dawn" environmentIntensity={0.4} />
-          <DriftingCan flavor="watermelon" offset={[-5, -1, -3]} />
-          <DriftingCan flavor="blackCherry" offset={[4, 2, -4]} />
-          <DriftingCan flavor="lemonLime" offset={[0, -2, -5]} />
-          <DriftingCan flavor="grape" offset={[-3, 3, -6]} />
-          <DriftingCan flavor="strawberryLemonade" offset={[5, -1.5, -2]} />
-          <Bubbles speed={1.2} count={40} />
-          <Float speed={0.5} rotationIntensity={1} floatIntensity={0.5}>
-            <pointLight position={[2, 3, 2]} intensity={0.8} color="#FFA500" />
-          </Float>
-        </View>
-      </div>
-
       <div ref={containerRef} className="relative z-10 max-w-4xl mx-auto text-center">
         <h1 ref={headingRef} className="text-5xl md:text-7xl font-black uppercase text-orange-600 drop-shadow-lg">
           <TextSplitter text="Our Story" />
