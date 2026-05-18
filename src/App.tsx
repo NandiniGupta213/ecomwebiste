@@ -24,7 +24,6 @@ function App() {
               <Carousel />
               <SkyDive />
               <AlternatingText />
-              <ViewCanvas />
             </>
           } />
           <Route path="/about" element={<AboutPage />} />
@@ -35,6 +34,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <ViewCanvas />
     </div>
   );
 }
