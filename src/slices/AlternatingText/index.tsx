@@ -33,7 +33,7 @@ export default function AlternatingText() {
     <Bounded className="alternating-text-container relative bg-yellow-300 text-sky-950">
       <div>
         <div className="relative z-[100] grid">
-          {/* 3D view – only visible on desktop (md and up) */}
+          {/* 3D view – only visible on desktop */}
           <View className="alternating-text-view absolute left-0 top-0 h-screen w-full max-md:hidden md:block">
             <Scene />
           </View>
@@ -46,18 +46,20 @@ export default function AlternatingText() {
               <div
                 className={clsx(
                   index % 2 === 0 ? "col-start-1" : "md:col-start-2",
-                  "rounded-lg p-4 backdrop-blur-lg max-md:bg-white/1",
+                  "rounded-lg p-4",
+                  // Solid background on mobile, blurred on desktop
+                  "bg-yellow-300/90 md:bg-yellow-300/40 md:backdrop-blur-lg",
                 )}
               >
-                <div className="text-balance text-6xl font-bold">
+                <div className="text-balance text-4xl md:text-6xl font-bold">
                   <p>{item.heading}</p>
                 </div>
-                <div className="mt-4 text-xl">
+                <div className="mt-4 text-base md:text-xl">
                   <p>{item.body}</p>
                 </div>
                 <a
                   href={item.ctaLink}
-                  className="inline-block mt-6 rounded-full bg-orange-600 px-6 py-2 text-sm font-bold uppercase tracking-wide text-white hover:bg-orange-700 transition"
+                  className="inline-block mt-6 rounded-full bg-orange-600 px-4 md:px-6 py-2 text-xs md:text-sm font-bold uppercase tracking-wide text-white hover:bg-orange-700 transition"
                 >
                   {item.ctaText}
                 </a>

@@ -5,6 +5,7 @@ import Button from "@/components/Button";
 import { TextSplitter } from "@/components/TextSplitter";
 import FloatingCan from "@/components/FloatingCan";
 import { Center } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 import { useCartStore } from "@/stores/cartStore";
 import { Link } from "react-router-dom"; // <-- import Link
 
@@ -161,18 +162,17 @@ export default function Hero() {
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
               {BEST_SELLERS.map((item) => (
                 <div
-  key={item.name}
-  className="group relative flex flex-col items-center rounded-2xl border border-yellow-400/40 bg-yellow-300/20 p-6 transition hover:-translate-y-2 hover:bg-yellow-300/40"
->
+                  key={item.name}
+                  className="group relative flex flex-col items-center rounded-2xl border border-yellow-400/40 bg-yellow-300/20 p-6 backdrop-blur-sm transition hover:-translate-y-2 hover:bg-yellow-300/40"
+                >
                   {item.badge && (
                     <span className="absolute -top-3 right-4 rounded-full bg-orange-600 px-3 py-1 text-xs font-bold uppercase text-white">
                       {item.badge}
                     </span>
                   )}
 
-                
-                  <div className="relative h-32 w-32">
-                    <View className="absolute inset-0 w-full h-full">
+                  <div className="h-32 w-32">
+                    <Canvas camera={{ position: [0, 0, 2.5], fov: 45 }} style={{ background: 'transparent' }}>
                       <ambientLight intensity={1.5} />
                       <directionalLight position={[3, 3, 2]} intensity={1.2} />
                       <Center>
@@ -183,7 +183,7 @@ export default function Hero() {
                           floatSpeed={5}
                         />
                       </Center>
-                    </View>
+                    </Canvas>
                   </div>
 
                   <h3 className="mt-4 text-xl font-bold uppercase text-sky-800">{item.name}</h3>
