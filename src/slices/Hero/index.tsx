@@ -5,7 +5,6 @@ import Button from "@/components/Button";
 import { TextSplitter } from "@/components/TextSplitter";
 import FloatingCan from "@/components/FloatingCan";
 import { Center } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
 import { useCartStore } from "@/stores/cartStore";
 import { Link } from "react-router-dom"; // <-- import Link
 
@@ -171,8 +170,9 @@ export default function Hero() {
                     </span>
                   )}
 
-                  <div className="h-32 w-32">
-                    <Canvas camera={{ position: [0, 0, 2.5], fov: 45 }} style={{ background: 'transparent' }}>
+                
+                  <div className="relative h-32 w-32">
+                    <View className="absolute inset-0 w-full h-full">
                       <ambientLight intensity={1.5} />
                       <directionalLight position={[3, 3, 2]} intensity={1.2} />
                       <Center>
@@ -183,7 +183,7 @@ export default function Hero() {
                           floatSpeed={5}
                         />
                       </Center>
-                    </Canvas>
+                    </View>
                   </div>
 
                   <h3 className="mt-4 text-xl font-bold uppercase text-sky-800">{item.name}</h3>
