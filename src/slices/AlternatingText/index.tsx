@@ -30,47 +30,41 @@ const alternatingTextData = {
 
 export default function AlternatingText() {
   return (
-    <Bounded className="alternating-text-container relative bg-yellow-300 text-sky-950 overflow-hidden">
-      {/* 3D scene – now confined to section, not full viewport */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <View className="w-full h-full">
-          <Scene />
-        </View>
-      </div>
+    <Bounded className="alternating-text-container relative bg-yellow-300 text-sky-950">
+      <div>
+        <div className="relative z-[100] grid">
+          {/* 3D view – only visible on desktop (md and up) */}
+          <View className="alternating-text-view absolute left-0 top-0 h-screen w-full max-md:hidden md:block">
+            <Scene />
+          </View>
 
-      <div className="relative z-10">
-        {alternatingTextData.textGroup.map((item, index) => (
-          <div
-            key={item.heading}
-            className={clsx(
-              "alternating-section grid py-16 md:py-24 px-4 md:px-8",
-              "gap-y-8 gap-x-12",
-              "md:grid-cols-2 md:place-items-center",
-              "min-h-[70vh] md:min-h-screen" // shorter on mobile
-            )}
-          >
+          {alternatingTextData.textGroup.map((item, index) => (
             <div
-              className={clsx(
-                index % 2 === 0 ? "md:col-start-1" : "md:col-start-2",
-                "rounded-2xl p-6 backdrop-blur-lg bg-yellow-300/40",
-                "max-w-2xl mx-auto md:mx-0"
-              )}
+              key={item.heading}
+              className="alternating-section grid h-screen place-items-center gap-x-12 md:grid-cols-2"
             >
-              <div className="text-3xl sm:text-4xl md:text-6xl font-bold text-balance">
-                {item.heading}
-              </div>
-              <div className="mt-4 text-base sm:text-lg md:text-xl text-balance">
-                {item.body}
-              </div>
-              <a
-                href={item.ctaLink}
-                className="inline-block mt-6 rounded-full bg-orange-600 px-6 py-2 text-sm md:text-base font-bold uppercase tracking-wide text-white hover:bg-orange-700 transition"
+              <div
+                className={clsx(
+                  index % 2 === 0 ? "col-start-1" : "md:col-start-2",
+                  "rounded-lg p-4 backdrop-blur-lg max-md:bg-white/1",
+                )}
               >
-                {item.ctaText}
-              </a>
+                <div className="text-balance text-6xl font-bold">
+                  <p>{item.heading}</p>
+                </div>
+                <div className="mt-4 text-xl">
+                  <p>{item.body}</p>
+                </div>
+                <a
+                  href={item.ctaLink}
+                  className="inline-block mt-6 rounded-full bg-orange-600 px-6 py-2 text-sm font-bold uppercase tracking-wide text-white hover:bg-orange-700 transition"
+                >
+                  {item.ctaText}
+                </a>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </Bounded>
   );
